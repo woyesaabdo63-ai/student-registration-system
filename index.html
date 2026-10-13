@@ -1,0 +1,669 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #123b69;
+            color: white;
+            padding: 25px 16px;
+            text-align: center;
+        }
+
+        header p {
+            color: #dbeafe;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1150px;
+            margin: 28px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        h2 {
+            color: #123b69;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid #93c5fd;
+            border-color: #2563eb;
+        }
+
+        .buttons, .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            border: none;
+            border-radius: 7px;
+            padding: 11px 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .secondary {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .edit-button {
+            background: #f59e0b;
+            color: #111827;
+            margin: 2px;
+        }
+
+        .delete-button {
+            background: #dc2626;
+            color: white;
+            margin: 2px;
+        }
+
+        .message {
+            display: none;
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 7px;
+            overflow-wrap: anywhere;
+        }
+
+        .success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .toolbar input {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 800px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        th {
+            background: #eff6ff;
+            color: #123b69;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        footer {
+            background: #123b69;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 650px) {
+            .container {
+                width: 95%;
+                margin: 16px auto;
+            }
+
+            .card {
+                padding: 17px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Student Registration System</h1>
+    <p>Welcome to our Student Registration System.</p>
+</header>
+
+<main class="container">
+
+    <section class="card">
+        <h2 id="formTitle">Register New Student</h2>
+
+        <div id="message" class="message" role="status"
+             aria-live="polite"></div>
+
+        <form id="studentForm">
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="studentId">Student ID:</label>
+                    <input id="studentId" name="studentId"
+                           type="text" maxlength="20" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="firstName">First Name:</label>
+                    <input id="firstName" name="firstName"
+                           type="text" maxlength="50" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name:</label>
+                    <input id="lastName" name="lastName"
+                           type="text" maxlength="50" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <select id="gender" name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input id="email" name="email"
+                           type="email" maxlength="100" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="department">Department:</label>
+                    <select id="department" name="department" required>
+                        <option value="">Select Department</option>
+                        <option value="Software Engineering">
+                            Software Engineering
+                        </option>
+                        <option value="Computer Science">
+                            Computer Science
+                        </option>
+                        <option value="Information Technology">
+                            Information Technology
+                        </option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="buttons">
+                <button type="submit" class="primary" id="submitButton">
+                    Register Student
+                </button>
+
+                <button type="button" class="secondary"
+                        id="cancelButton" hidden>
+                    Cancel Edit
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>Registered Students</h2>
+
+        <div class="toolbar">
+            <input type="search" id="searchInput"
+                   placeholder="Search students..."
+                   aria-label="Search students">
+
+            <button type="button" class="secondary"
+                    id="showAllButton">
+                Show All
+            </button>
+        </div>
+
+        <div id="tableMessage" class="message"
+             role="status" aria-live="polite"></div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Gender</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="studentsTableBody">
+                    <tr>
+                        <td colspan="7" class="empty">
+                            Loading students...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>Student Registration System | Powered by MySQL and Express</p>
+</footer>
+
+<script>
+    const form = document.getElementById("studentForm");
+    const message = document.getElementById("message");
+    const tableMessage = document.getElementById("tableMessage");
+    const tableBody = document.getElementById("studentsTableBody");
+    const searchInput = document.getElementById("searchInput");
+    const submitButton = document.getElementById("submitButton");
+    const cancelButton = document.getElementById("cancelButton");
+    const formTitle = document.getElementById("formTitle");
+
+    let students = [];
+    let editingId = null;
+
+    function showMessage(text, type = "success") {
+        message.textContent = text;
+        message.className = "message " + type;
+    }
+
+    function showTableMessage(text, type = "error") {
+        tableMessage.textContent = text;
+        tableMessage.className = "message " + type;
+    }
+
+    function getValue(student, names) {
+        for (const name of names) {
+            if (student[name] !== undefined &&
+                student[name] !== null) {
+                return student[name];
+            }
+        }
+
+        return "";
+    }
+
+    function recordId(student) {
+        return getValue(student, ["id"]);
+    }
+
+    function studentId(student) {
+        return getValue(student, ["student_id", "studentId"]);
+    }
+
+    function firstName(student) {
+        return getValue(student, ["first_name", "firstName"]);
+    }
+
+    function lastName(student) {
+        return getValue(student, ["last_name", "lastName"]);
+    }
+
+    function gender(student) {
+        return getValue(student, ["gender"]);
+    }
+
+    function email(student) {
+        return getValue(student, ["email"]);
+    }
+
+    function department(student) {
+        return getValue(student, ["department"]);
+    }
+
+    async function apiRequest(url, options = {}) {
+        const response = await fetch(url, {
+            ...options,
+            credentials: "same-origin",
+            headers: {
+                ...(options.body
+                    ? { "Content-Type": "application/json" }
+                    : {}),
+                ...options.headers
+            }
+        });
+
+        const text = await response.text();
+        let data = {};
+
+        try {
+            data = text ? JSON.parse(text) : {};
+        } catch {
+            data = { message: text };
+        }
+
+        if (!response.ok) {
+            if (response.status === 401) {
+                throw new Error(
+                    "Login session expired. Please log in again."
+                );
+            }
+
+            throw new Error(
+                data.message || `Request failed (${response.status}).`
+            );
+        }
+
+        return data;
+    }
+
+    async function loadStudents() {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty">Loading students...</td>
+            </tr>
+        `;
+
+        try {
+            const data = await apiRequest("/students");
+
+            students = Array.isArray(data) ? data : [];
+
+            renderStudents();
+
+            tableMessage.textContent = "";
+            tableMessage.className = "message";
+        } catch (error) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="empty">
+                        Could not load students.
+                    </td>
+                </tr>
+            `;
+
+            showTableMessage(error.message);
+        }
+    }
+
+    function renderStudents() {
+        const query = searchInput.value.trim().toLowerCase();
+
+        const filtered = students.filter(student => {
+            const text = [
+                studentId(student),
+                firstName(student),
+                lastName(student),
+                gender(student),
+                email(student),
+                department(student)
+            ].join(" ").toLowerCase();
+
+            return text.includes(query);
+        });
+
+        tableBody.replaceChildren();
+
+        if (filtered.length === 0) {
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+
+            cell.colSpan = 7;
+            cell.className = "empty";
+            cell.textContent = query
+                ? "No matching students found."
+                : "No registered students found.";
+
+            row.appendChild(cell);
+            tableBody.appendChild(row);
+            return;
+        }
+
+        filtered.forEach(student => {
+            const row = document.createElement("tr");
+
+            [
+                studentId(student),
+                firstName(student),
+                lastName(student),
+                gender(student),
+                email(student),
+                department(student)
+            ].forEach(value => {
+                const cell = document.createElement("td");
+                cell.textContent = value;
+                row.appendChild(cell);
+            });
+
+            const actionCell = document.createElement("td");
+
+            const editButton = document.createElement("button");
+            editButton.type = "button";
+            editButton.className = "edit-button";
+            editButton.textContent = "Edit";
+            editButton.addEventListener("click", () => {
+                editStudent(student);
+            });
+
+            const deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.className = "delete-button";
+            deleteButton.textContent = "Delete";
+            deleteButton.addEventListener("click", () => {
+                deleteStudent(student);
+            });
+
+            actionCell.append(editButton, deleteButton);
+            row.appendChild(actionCell);
+            tableBody.appendChild(row);
+        });
+    }
+
+    form.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        if (!form.reportValidity()) {
+            return;
+        }
+
+        const data = {
+            studentId: document.getElementById("studentId").value.trim(),
+            firstName: document.getElementById("firstName").value.trim(),
+            lastName: document.getElementById("lastName").value.trim(),
+            gender: document.getElementById("gender").value,
+            email: document.getElementById("email").value.trim(),
+            department: document.getElementById("department").value
+        };
+
+        // Check required fields before sending the request.
+        if (Object.values(data).some(value => !value)) {
+            showMessage(
+                "Please complete all six student fields.",
+                "error"
+            );
+            return;
+        }
+
+        submitButton.disabled = true;
+
+        try {
+            if (editingId !== null) {
+                await apiRequest(
+                    `/students/${encodeURIComponent(editingId)}`,
+                    {
+                        method: "PUT",
+                        body: JSON.stringify(data)
+                    }
+                );
+
+                showMessage("Student information updated successfully.");
+            } else {
+                await apiRequest("/students", {
+                    method: "POST",
+                    body: JSON.stringify(data)
+                });
+
+                showMessage("Student registered successfully.");
+            }
+
+            resetForm();
+            await loadStudents();
+        } catch (error) {
+            showMessage(error.message, "error");
+        } finally {
+            submitButton.disabled = false;
+        }
+    });
+
+    function editStudent(student) {
+        const id = recordId(student);
+
+        if (id === "") {
+            showMessage("Student database ID is missing.", "error");
+            return;
+        }
+
+        editingId = id;
+
+        document.getElementById("studentId").value = studentId(student);
+        document.getElementById("firstName").value = firstName(student);
+        document.getElementById("lastName").value = lastName(student);
+        document.getElementById("gender").value = gender(student);
+        document.getElementById("email").value = email(student);
+        document.getElementById("department").value = department(student);
+
+        formTitle.textContent = "Edit Student";
+        submitButton.textContent = "Save Changes";
+        cancelButton.hidden = false;
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deleteStudent(student) {
+        const id = recordId(student);
+
+        if (id === "") {
+            showMessage("Student database ID is missing.", "error");
+            return;
+        }
+
+        const name = `${firstName(student)} ${lastName(student)}`.trim();
+
+        if (!confirm(`Are you sure you want to delete ${name || "this student"}?`)) {
+            return;
+        }
+
+        try {
+            await apiRequest(`/students/${encodeURIComponent(id)}`, {
+                method: "DELETE"
+            });
+
+            showMessage("Student deleted successfully.");
+
+            if (String(editingId) === String(id)) {
+                resetForm();
+            }
+
+            await loadStudents();
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    }
+
+    function resetForm() {
+        form.reset();
+        editingId = null;
+        formTitle.textContent = "Register New Student";
+        submitButton.textContent = "Register Student";
+        cancelButton.hidden = true;
+    }
+
+    cancelButton.addEventListener("click", resetForm);
+
+    searchInput.addEventListener("input", renderStudents);
+
+    document.getElementById("showAllButton")
+        .addEventListener("click", () => {
+            searchInput.value = "";
+            renderStudents();
+        });
+
+    loadStudents();
+</script>
+
+</body>
+</html>
+
